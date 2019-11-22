@@ -88,7 +88,7 @@ srun = "srun -N 1 {cmd} >& {logfile} &"
 
 nsub = 0
 for i,d in enumerate(data):
-    if args.nvisit and nsub > args.nvisit:
+    if args.nvisit and nsub >= args.nvisit:
         break
 
     visit = d['visitid']
