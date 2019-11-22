@@ -11,24 +11,27 @@ import glob
 import argparse
 parser = argparse.ArgumentParser(description=__doc__)
 group = parser.add_mutually_exclusive_group()
-group.add_argument('--sbatch',action='store_true')
-group.add_argument('--srun',action='store_true')
+group.add_argument('--sbatch',action='store_true',
+                   help="submit with sbatch from login node")
+group.add_argument('--srun',action='store_true',
+                   help="submit with srun from interactive node")
+parser.add_argument('-d','--dryrun',action='store_true',
+                    help="generate submission files but don't submit")
 parser.add_argument('-f','--force',action='store_true',
                     help="force rerun")
 parser.add_argument('-r','--runid',default=0,type=int,
-                    help="run id")
-parser.add_argument('-v','--visit',default=None,action='append',
-                    help="specify visit number(s)")
+                    help="integer run id for output directory")
 parser.add_argument('-b','--bands',action='append',nargs='+',
                     help="select specific bands")
-parser.add_argument('-n','--nvisit',default=None,type=int,
+group = parser.add_mutually_exclusive_group()
+group.add_argument('-v','--visit',default=None,action='append',
+                    help="specify visit number(s)")
+group.add_argument('-n','--nvisit',default=None,type=int,
                     help="number of visits to run")
 parser.add_argument('--vmin',default=None,type=int,
                     help="minimum visit number")
 parser.add_argument('--vmax',default=None,type=int,
                     help="maximum visit number")
-parser.add_argument('-d','--dryrun',action='store_true',
-                    help="generate submission files but don't submit")
 args = parser.parse_args()
 
 #args.dryrun=False # True #hack
