@@ -1,7 +1,6 @@
 input:
 
     dir: '/global/cscratch1/sd/desc/DC2/data/Run2.1i/rerun/calexp-v1/'
-    #image_file_name: 'calexp/00733728-r/R43/calexp_00733728-r-R43-S01-det181.fits'
     image_file_name: 'calexp/00733728-r/*/calexp_00733728-r-*.fits'
     image_hdu: 1
     weight_hdu: 3
@@ -9,6 +8,11 @@ input:
 
     cat_file_name: '/global/cscratch1/sd/mjarvis/DC2/fake_gaia.fits'
     cat_hdu: 1
+
+    chipnum:
+        type: Eval
+        str: "int(ifn[-8:-5])"
+        sifn: "@input.image_file_name"
 
     ra_col: ra
     dec_col: dec
@@ -21,27 +25,31 @@ input:
     min_snr: 20
 
     stamp_size: 25
+    nproc: 32
 
 
 output:
-    dir: '/global/cscratch1/sd/mjarvis/DC2/dc2.1_test'
-    #file_name: 'piff_00733728-r-R43-S01-det181.fits'
+    dir: '/global/cscratch1/sd/mjarvis/DC2/dc2.1'
     file_name: 'piff_00733728-r.fits'
 
     stats:
-        -  
+        -
             type: Rho
-            file_name: rho.png
+            file_name: "rho.png'"
         -
             type: ShapeHistograms
-            file_name: shape.png
+            file_name: "shape.png'"
         -
             type: TwoDHist
-            file_name: twod.png
+            file_name: "twod.png'"
+        -
+            type: HSMCatalog
+            file_name: "cat.fits'"
 
 psf:
 
     type: SingleChip
+    nproc: 32
 
     model:
         type: PixelGrid

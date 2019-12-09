@@ -38,7 +38,7 @@ args = parser.parse_args()
 runid = args.runid
 
 basedir  = '/global/cscratch1/sd/desc/DC2/data/Run2.1i/rerun/calexp-v1'
-outbase   = '/global/cscratch1/sd/mjarvis/DC2/dc2.1_test'
+outbase   = '/global/cscratch1/sd/mjarvis/DC2/dc2.1'
 config   = os.path.join(outbase,'piff.yaml')
 
 dirnames = sorted(glob.glob(os.path.join(basedir,'calexp/*')))
