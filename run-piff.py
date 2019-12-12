@@ -68,7 +68,7 @@ data = alldata[sel]
 #SBATCH --cpus-per-task=16
 
 # Template for the piff command
-piff = "piffify {config} output.dir={outdir} input.image_file_name={image_file_name} output.file_name={file_name}"
+piff = "piffify {config} output.dir={outdir} input.image_file_name={image_file_name} output.file_name={file_name} output.stats.0.file_name={rho_name} output.stats.1.file_name={shape_name} output.stats.2.file_name={twod_name} output.stats.3.file_name={outcat_name}"
 
 # Template for slurm
 slurm = """#!/bin/bash -l
@@ -77,7 +77,7 @@ slurm = """#!/bin/bash -l
 #SBATCH -q regular
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node=1
-#SBATCH --time=02:00:00
+#SBATCH --time=01:00:00
 #SBATCH --job-name={visit}
 #SBATCH --output={logfile}
 
@@ -103,6 +103,10 @@ for i,d in enumerate(data):
     outdir=os.path.join(outbase,'piff-run-{runid:04d}/{visit}'.format(runid=runid,visit=visit))
 
     file_name = 'piff_{visit}.fits'.format(visit=visit)
+    rho_name = 'piff_{visit}_rho.png'.format(visit=visit)
+    shape_name = 'piff_{visit}_shape.png'.format(visit=visit)
+    twod_name = 'piff_{visit}_twod.png'.format(visit=visit)
+    outcat_name = 'piff_{visit}_cat.fits'.format(visit=visit)
     outfile = os.path.join(outdir,file_name)
     logfile = os.path.join(outdir,'piff_{visit}.log'.format(visit=visit))
     subfile = os.path.join(outdir,'piff_{visit}.sub'.format(visit=visit))
@@ -115,7 +119,10 @@ for i,d in enumerate(data):
     subprocess.call('mkdir -p {outdir}'.format(outdir=outdir),shell=True)
 
     # Create piff command
-    cmd = piff.format(config=config,outdir=outdir,image_file_name=image_file_name,file_name=file_name)
+    cmd = piff.format(config=config, outdir=outdir, image_file_name=image_file_name,
+                      file_name=file_name, rho_name=rho_name, shape_name=shape_name,
+                      twod_name=twod_name, outcat_name=outcat_name)
+    env = dict(os.environ, OMP_NUM_THREADS='2')
 
     if args.sbatch:
         # Write the submission script
@@ -131,8 +138,7 @@ for i,d in enumerate(data):
     print(exe)
 
     if not args.dryrun:
-        #subprocess.call(submit,shell=True)
         print("Executing job...")
-        subprocess.call(exe,shell=True)
+        subprocess.call(exe, env=env, shell=True)
 
     nsub += 1
