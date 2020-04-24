@@ -25,7 +25,7 @@ input:
     min_snr: 20
 
     stamp_size: 25
-    nproc: 32
+    nproc: 16
 
 
 output:
@@ -35,21 +35,21 @@ output:
     stats:
         -
             type: Rho
-            file_name: "rho.png'"
+            file_name: "rho.pdf"
         -
             type: ShapeHistograms
-            file_name: "shape.png'"
+            file_name: "shape.pdf"
         -
             type: TwoDHist
-            file_name: "twod.png'"
+            file_name: "twod.pdf"
         -
             type: HSMCatalog
-            file_name: "cat.fits'"
+            file_name: "cat.fits"
 
 psf:
 
     type: SingleChip
-    nproc: 32
+    nproc: 16
 
     model:
         type: PixelGrid
